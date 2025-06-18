@@ -3,7 +3,7 @@ function render_products_from_query($query, $columns = 3) {
     ob_start();
 
     if ($query->have_posts()) {
-        echo '<ul id="products" class="tt product-grid columns-' . intval($columns) . '">';
+        echo '<ul id="products" class="product-grid columns-' . intval($columns) . '">';
 
         while ($query->have_posts()) {
             $query->the_post();
@@ -28,11 +28,6 @@ function render_products_from_query($query, $columns = 3) {
 
         echo '</ul>'; // end .product-grid
 
-        // echo paginate_links([
-        //     'total' => $query->max_num_pages,
-        //     'current' => max(1, get_query_var('paged')),
-        //     'add_fragment' => '#products',
-        // ]);
         echo '<nav class="igp-pagination">';
         echo paginate_links([
             'total' => $query->max_num_pages,

@@ -3,38 +3,23 @@
  * Plugin Name: INetGap shortcodes
  * Plugin URI: https://www.inetgap.sk
  * Description: Display content using a shortcode to insert in a page or post
- * Version: 0.2
+ * Version: 0.1
  * Text Domain: inetgap_shortcodes
  * Author: iNetGap solutions
  * Author URI: https://www.inetgap.sk
  * for debug purposes use echo_log($test);
  */
 
-require_once plugin_dir_path(__FILE__) . 'template/render-products.php';
+require_once plugin_dir_path(__FILE__) . 'includes/project-config.php';
+$project = inetgap_get_current_project();
 
-/** Enqueue styles and scripts for the plugin.
- */
-function enqueue_main_css() {
-    wp_enqueue_style(
-        'my-plugin-style',
-        plugin_dir_url(__FILE__) . 'assets/igp-utils.css',
-        [],
-        '1.0'
-    );
-}
+// Load correct render file
+$project_render = plugin_dir_path(__FILE__) . "template/project/{$project}/render-products.php";
+$default_render = plugin_dir_path(__FILE__) . 'template/render-products.php';
+require_once file_exists($project_render) ? $project_render : $default_render;
 
-/** Enqueue JavaScript for the plugin.
- */
-function enqueue_js() {
-    wp_enqueue_script(
-        'my-plugin-script',
-        plugin_dir_url(__FILE__) . 'assets/igp-scripts.js',
-        [],
-        '1.0',
-        true
-    );
-}
-
+// load assets
+require_once plugin_dir_path(__FILE__) . 'includes/enqueue-assets.php';
 
 /*
 * Shortcode to display a filter form for products.
@@ -47,7 +32,7 @@ function inetgap_filter_form($atts) {
     $atts = shortcode_atts([
         'fields' => ''
     ], $atts);
-    enqueue_main_css();
+    //enqueue_main_css();
     $field_keys = array_map('trim', explode(',', $atts['fields']));
     if (empty($field_keys)) return '';
 
