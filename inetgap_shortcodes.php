@@ -3,7 +3,7 @@
  * Plugin Name: INetGap shortcodes
  * Plugin URI: https://www.inetgap.sk
  * Description: Display content using a shortcode to insert in a page or post
- * Version: 0.1
+ * Version: 0.2
  * Text Domain: inetgap_shortcodes
  * Author: iNetGap solutions
  * Author URI: https://www.inetgap.sk
