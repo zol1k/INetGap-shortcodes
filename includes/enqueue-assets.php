@@ -27,24 +27,24 @@ function inetgap_enqueue_assets() {
 
     if (array_key_exists($current_host, $inetgap_projects)) {
         $project = $inetgap_projects[$current_host];
-
-        // SPECIFIC STYLE
-        $css_file = "assets/project/{$project}.css";
-        if (file_exists($path . $css_file)) {
+        $project_dir = INETGAP_PLUGIN_URL . 'project-specific/' . $project . '/';
+        // PROJECT CSS
+        $css_file = "style.css";
+        if (file_exists($project_dir . $css_file)) {
             wp_enqueue_style(
                 "inetgap-{$project}-style",
-                $url . $css_file,
-                [],
+                $project_dir . $css_file,
+                ['inetgap-global-style'],
                 '1.0'
             );
         }
 
-        // SPECIFIC SCRIPT
-        $js_file = "assets/project/{$project}.js";
-        if (file_exists($path . $js_file)) {
+        // PROJECT JS
+        $js_file = "script.js";
+        if (file_exists($project_dir . $js_file)) {
             wp_enqueue_script(
                 "inetgap-{$project}-script",
-                $url . $js_file,
+                $project_dir . $js_file,
                 ['inetgap-global-script'],
                 '1.0',
                 true
