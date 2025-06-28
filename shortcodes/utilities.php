@@ -55,4 +55,53 @@ function igp_read_more($atts, $content = null) {
 }
 add_shortcode('igp-read-more', 'igp_read_more');
 
+/**
+ * Shortcode to print all ACF fields for the current post.
+ * Usage: [acf_dump]
+ * 
+ * This shortcode outputs all ACF fields in a structured format.
+ */
+function print_all_acf_fields_shortcode() {
+    ob_start();
 
+    // Show CPT
+    $post_type = get_post_type(get_post());
+    echo '<p><strong>Custom Post Type:</strong> <code>' . esc_html($post_type) . '</code></p>';
+
+    $fields = get_field_objects();
+
+    if ($fields) {
+        echo '<div class="acf-fields-list">';
+        foreach ($fields as $field_key => $field) {
+            echo '<div class="acf-field">';
+            
+            // Show field label and name (slug)
+            echo '<strong>' . esc_html($field['label']) . '</strong> ';
+            echo '<code>(' . esc_html($field['name']) . ')</code><br>';
+
+            // Repeater handling
+            if ($field['type'] === 'repeater' && !empty($field['value']) && is_array($field['value'])) {
+                echo '<ul>';
+                foreach ($field['value'] as $row) {
+                    echo '<li>';
+                    foreach ($row as $sub_key => $sub_value) {
+                        echo esc_html($sub_key) . ': ' . esc_html($sub_value) . '<br>';
+                    }
+                    echo '</li>';
+                }
+                echo '</ul>';
+            } else {
+                // Other fields
+                echo esc_html(is_array($field['value']) ? json_encode($field['value']) : $field['value']);
+            }
+
+            echo '</div>';
+        }
+        echo '</div>';
+    } else {
+        echo '<p>No ACF fields found for this post.</p>';
+    }
+
+    return ob_get_clean();
+}
+add_shortcode('acf_dump', 'print_all_acf_fields_shortcode');

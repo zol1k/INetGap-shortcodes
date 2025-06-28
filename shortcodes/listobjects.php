@@ -27,7 +27,17 @@ function igp_list_cpt_by_fields_shortcode($atts) {
             [$key, $value] = array_map('trim', explode(':', $pair, 2));
             $meta_query[] = [
                 'key' => $key,
+                'value' => $value,
+                'compare' => 'LIKE'
+            ];
+            $meta_query[] = [
+                'key' => $key,
                 'value' => '"' . $value . '"',
+                'compare' => 'LIKE'
+            ];
+            $meta_query[] = [
+                'key' => $key,
+                'value' => 's:' . strlen($value) . ':"' . $value . '"',
                 'compare' => 'LIKE'
             ];
         }
