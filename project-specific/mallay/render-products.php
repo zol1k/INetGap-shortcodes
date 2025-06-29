@@ -7,33 +7,45 @@ function render_products_from_query($query, $columns = 3) {
 
         while ($query->have_posts()) {
             $query->the_post();
-            $repeater_field = 'aircond-params';
 
             echo '<li class="product-card">';
 
             // Featured image
             if (has_post_thumbnail()) {
-                echo '<div class="product-image">' . get_the_post_thumbnail(get_the_ID(), 'medium') . '</div>';
+                $featured_img_url = get_the_post_thumbnail_url(get_the_ID(),'full');
+                echo '<div class="product-image" style="background-image: url(\''.esc_url($featured_img_url).'\')"></div>';
             }
 
             echo '<h3>' . get_the_title() . '</h3>';
 
-            // Parameters (repeater field)
-            if ($repeater_field && have_rows($repeater_field)) {
-                echo '<div class="product-description">';
-                while (have_rows($repeater_field)) {
+            $post_type = get_post_type();
+
+            $acf_field_name = $post_type === 'airconditioner' ? 'aircond-params' :
+                            ($post_type === 'heatpump' ? 'heatpump-params' : '');
+
+            if ($acf_field_name && have_rows($acf_field_name)) {
+                echo '<ul class="product-params">';
+                
+                while (have_rows($acf_field_name)) {
                     the_row();
-                    $name = get_sub_field('name');
+
+                    $label = get_sub_field('name');
                     $value = get_sub_field('value');
-                    if ($name && $value) {
-                        echo '<p><strong>' . esc_html($name) . ':</strong> ' . esc_html($value) . '</p>';
+
+                    // Handle array values (like checkboxes)
+                    if (is_array($value)) {
+                        $value = implode(', ', $value);
                     }
+
+                    echo '<li><strong>' . esc_html($label) . ':</strong> ' . esc_html($value) . '</li>';
                 }
-                echo '</div>';
+
+                echo '</ul>';
             }
 
+
             // Button/link
-            echo '<div class="product-link"><a href="' . get_permalink() . '" class="btn">Viac info</a></div>';
+            echo '<div class="product-link"><a href="' . get_permalink() . '" class="fusion-button button-flat fusion-button-default-size button-default fusion-button-default button-3 fusion-button-default-span fusion-button-default-type">Viac info</a></div>';
             echo '</li>';
         }
 

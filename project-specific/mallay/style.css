@@ -1,0 +1,17 @@
+li.product-card {
+    padding: 0px;
+    background-color: transparent;
+}
+
+.product-image {
+    min-height: 300px;
+    width: 100%;
+    background-size: contain;
+}
+
+.product-link{text-align: left;}
+
+ul.product-params {
+    list-style-type: none;
+    padding: 0;
+}

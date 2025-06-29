@@ -37,7 +37,7 @@ require_once file_exists($project_render) ? $project_render : $default_render;
 require_once plugin_dir_path(__FILE__) . 'includes/enqueue-assets.php';
 
 // Load project-specific shortcodes
-$project_shortcodes = INETGAP_PLUGIN_PATH . "project-specific/{$project}/shortcodes1.php";
+$project_shortcodes = INETGAP_PLUGIN_PATH . "project-specific/{$project}/shortcodes.php";
 if (file_exists($project_shortcodes)) {
     require_once $project_shortcodes;
 }

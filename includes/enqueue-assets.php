@@ -2,13 +2,12 @@
 function inetgap_enqueue_assets() {
     global $inetgap_projects;
 
-    $url = plugin_dir_url(__FILE__, 2); // go up two levels
-    $path = plugin_dir_path(__FILE__, 2);
+    $assets_url = INETGAP_PLUGIN_URL . 'includes/assets/'; // go up two levels
 
     // GLOBAL STYLES
     wp_enqueue_style(
         'inetgap-global-style',
-        $url . 'assets/igp-utils.css',
+        $assets_url . 'igp-utils.css',
         [],
         '1.0'
     );
@@ -16,7 +15,7 @@ function inetgap_enqueue_assets() {
     // GLOBAL SCRIPTS
     wp_enqueue_script(
         'inetgap-global-script',
-        $url . 'assets/igp-scripts.js',
+        $assets_url . 'igp-scripts.js',
         [],
         '1.0',
         true
@@ -27,13 +26,15 @@ function inetgap_enqueue_assets() {
 
     if (array_key_exists($current_host, $inetgap_projects)) {
         $project = $inetgap_projects[$current_host];
-        $project_dir = INETGAP_PLUGIN_URL . 'project-specific/' . $project . '/';
+        $specific_dir_path = INETGAP_PLUGIN_PATH . 'project-specific/' . $project . '/';
+        $specific_dir_url = INETGAP_PLUGIN_URL . 'project-specific/' . $project . '/';
+
         // PROJECT CSS
         $css_file = "style.css";
-        if (file_exists($project_dir . $css_file)) {
+        if (file_exists($specific_dir_path . $css_file)) {
             wp_enqueue_style(
                 "inetgap-{$project}-style",
-                $project_dir . $css_file,
+                $specific_dir_url . $css_file,
                 ['inetgap-global-style'],
                 '1.0'
             );
@@ -41,10 +42,10 @@ function inetgap_enqueue_assets() {
 
         // PROJECT JS
         $js_file = "script.js";
-        if (file_exists($project_dir . $js_file)) {
+        if (file_exists($specific_dir_path . $js_file)) {
             wp_enqueue_script(
                 "inetgap-{$project}-script",
-                $project_dir . $js_file,
+                $specific_dir_url . $js_file,
                 ['inetgap-global-script'],
                 '1.0',
                 true
